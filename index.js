@@ -1,79 +1,110 @@
 "use strict"
 
 const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/search";
-const LYRICS_URL = "https://api.musixmatch.com/ws/1.1/";
+const LYRICS_URL = "https://api.lyrics.ovh/v1/artist/";
+const ITUNES_URL = "https://itunes.apple.com/search"
 const SONGFACTS_URL = "";
 const REVIEWS_URL = "";
 const WIKI_URL = "https://en.wikipedia.org/w/api.php";
 const TOURS_URL = "";
 
-function getDatafromApi(searchTerm, callback) {
-  /*const queryYoutube = {
+function getDataFromApi(searchTerm) {
+  
+  //Youtube API
+  const queryYoutube = {
     part: "snippet",
     key: "AIzaSyBZcoFcX2hjtIRehNbhQyocEprrx2cOAfM",
     q: `${searchTerm} song`,
-    maxResults: "3",
+    maxResults: "5",
     type: "video",
     order: "viewCount",
-    nextPageToken: "next",
-    prevPageToken: "prev"
-  };*/
-  //$.getJSON(YOUTUBE_URL, queryYoutube, callback);
-
-  const queryLyrics = {
-    apikey: "723d40ea5e7c1abaf24147f2d427939a",
-    q_track: `${searchTerm}`,
-    s_track_rating: "DESC",
-    origin: "*"
-  };
-  $.getJSON(LYRICS_URL, queryLyrics, callback);
-
-  const querySongfacts = {};
-  const queryReviews = {};
-
+  }
+  $.getJSON(YOUTUBE_URL, queryYoutube, function (obj) {
+    $("#results").prop("hidden", false).append(`
+    <div><img src="${obj.items[0].snippet.thumbnails.medium.url}">
+    </div>
+    `);
+  });
+  
+  //Wikipedia API
   const queryWiki = {
     action: "query",
     list: "search",
     srsearch: `${searchTerm} song`,
     format: "json",
     origin: "*"
-  };
-  $.getJSON(WIKI_URL, queryWiki, callback);
+  }
+  $.getJSON(WIKI_URL, queryWiki, function (obj) {
+    $("#results").prop("hidden", false).append(`
+    <div>
+      <h2>Wiki Snippet: </h2>
+      <p>${obj.query.search[0].snippet}</p>
+      <p>Wiki Page: https://en.wikipedia.org/?curid=${obj.query.search[0].pageid}</p>
+    </div>
+    `)
+  });
 
-  const queryTours = {};
-}
+  //Musixmatch API
+  $.ajax({
+    type: "GET",
+    data: {
+      apikey: "723d40ea5e7c1abaf24147f2d427939a",
+      q_track: `${searchTerm}`,
+      s_track_rating: "DESC", 
+      format: "jsonp",
+      callback: "jsonp_callback"
+    },
+    url: "https://api.musixmatch.com/ws/1.1/track.search",
+    dataType: "jsonp",
+    jsonpCallback: "jsonp_callback",
+    contentType: "application/json",
+    success: function(data) {
+    $("#results").prop("hidden", false).append(`
+      <div>
+        <h2>Musixmatch info/lyrics</h2>
+        <ul>
+          <li>Name: ${data.message.body.track_list["0"].track.track_name}</li>
+          <li>Artist: ${data.message.body.track_list["0"].track.artist_name}</li>
+          <li>Album: ${data.message.body.track_list["0"].track.album_name}</li>
+          <li>Release Date: ${data.message.body.track_list["0"].track.first_release_date}</li>
+          <li>Genre: ${data.message.body.track_list["0"].track.primary_genres.music_genre_list[0].music_genre.music_genre_name}</li>
+          <li>Track Length: ${data.message.body.track_list["0"].track.track_length}</li>
+        </ul>
+      </div>
+    `);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      console.log(textStatus);
+      console.log(errorThrown);
+    }
+  });
 
-function renderResult(result) {
-  //let youtubeThumb = result.snippet.thumbnails.medium.url;
-  //let youtubeTitle = result.snippet.title;
-  //let youtubeID = result.id.videoId;
-  //let youtubeImgAlt = result.snippet.description;
-
-  //let trackId = search.result[0].pageid;
-  
-  //let wikiInfo = result.snippet; 
-
-  return `
-  <p>${lyricsBody}</p>
-  `
-}
-
-function displaySearchData(data) {
-  //const results = data.items.map((item, index) => renderResult(item));
-  console.log(data);
-  const results = data.query.map((item, index) => renderResult(item));
-  
-  //const results = data.query.search.map((item, index) => renderResult(item)); 
-  console.log(results);
-  $("#results").prop("hidden", false).html(results);
+  //iTunes
+  $.ajax({
+    type: "GET",
+    data: {
+      term: `${searchTerm}`,
+      country: "US",
+    },
+    url: "https://itunes.apple.com/search",
+    success: function(data) {
+      console.log(data);
+      /*$("#results").prop("hidden", false).append(`
+        <div>
+          <h2>iTunes info: </h2>
+          <p></p>
+        </div>
+      `)*/
+    }
+  });
 }
 
 function watchSubmit() {
-  $("#js-search-form").submit(function() {
+  $("#js-search-form").submit(function () {
     event.preventDefault();
     const query = $("#song-search").val();
-    console.log(query);
-    getDatafromApi(query, displaySearchData);
+    getDataFromApi(query);
   });
 }
 
