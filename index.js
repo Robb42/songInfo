@@ -1,13 +1,5 @@
 "use strict"
 
-const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/search";
-const LYRICS_URL = "https://api.lyrics.ovh/v1/artist/";
-const ITUNES_URL = "https://itunes.apple.com/search"
-const SONGFACTS_URL = "";
-const REVIEWS_URL = "";
-const WIKI_URL = "https://en.wikipedia.org/w/api.php";
-const TOURS_URL = "";
-
 function getDataFromApi(searchTerm) {
   
   //Youtube API
@@ -19,10 +11,10 @@ function getDataFromApi(searchTerm) {
     type: "video",
     order: "viewCount",
   }
-  $.getJSON(YOUTUBE_URL, queryYoutube, function (obj) {
-    $("#results").prop("hidden", false).append(`
-    <div><img src="${obj.items[0].snippet.thumbnails.medium.url}">
-    </div>
+  $.getJSON("https://www.googleapis.com/youtube/v3/search", queryYoutube, function (obj) {
+    $("#results").prop("hidden", false);
+    $("#watch-results").append(`
+      <img src="${obj.items[0].snippet.thumbnails.medium.url}">
     `);
   });
   
@@ -34,13 +26,11 @@ function getDataFromApi(searchTerm) {
     format: "json",
     origin: "*"
   }
-  $.getJSON(WIKI_URL, queryWiki, function (obj) {
-    $("#results").prop("hidden", false).append(`
-    <div>
-      <h2>Wiki Snippet: </h2>
+  $.getJSON("https://en.wikipedia.org/w/api.php", queryWiki, function (obj) {
+    $("#results").prop("hidden", false);
+    $("#info-results").append(`
       <p>${obj.query.search[0].snippet}</p>
       <p>Wiki Page: https://en.wikipedia.org/?curid=${obj.query.search[0].pageid}</p>
-    </div>
     `)
   });
 
@@ -59,25 +49,18 @@ function getDataFromApi(searchTerm) {
     jsonpCallback: "jsonp_callback",
     contentType: "application/json",
     success: function(data) {
-    $("#results").prop("hidden", false).append(`
-      <div>
-        <h2>Musixmatch info/lyrics</h2>
-        <ul>
-          <li>Name: ${data.message.body.track_list["0"].track.track_name}</li>
-          <li>Artist: ${data.message.body.track_list["0"].track.artist_name}</li>
-          <li>Album: ${data.message.body.track_list["0"].track.album_name}</li>
-          <li>Release Date: ${data.message.body.track_list["0"].track.first_release_date}</li>
-          <li>Genre: ${data.message.body.track_list["0"].track.primary_genres.music_genre_list[0].music_genre.music_genre_name}</li>
-          <li>Track Length: ${data.message.body.track_list["0"].track.track_length}</li>
-        </ul>
-      </div>
+    $("#results").prop("hidden", false);
+    $("#info-results").append(`
+      <ul>
+        <li>Name: ${data.message.body.track_list["0"].track.track_name}</li>
+        <li>Artist: ${data.message.body.track_list["0"].track.artist_name}</li>
+        <li>Album: ${data.message.body.track_list["0"].track.album_name}</li>
+        <li>Release Date: ${data.message.body.track_list["0"].track.first_release_date}</li>
+        <li>Genre: ${data.message.body.track_list["0"].track.primary_genres.music_genre_list[0].music_genre.music_genre_name}</li>
+        <li>Track Length: ${data.message.body.track_list["0"].track.track_length}</li>
+      </ul>
     `);
     },
-    error: function(jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
-      console.log(textStatus);
-      console.log(errorThrown);
-    }
   });
 
   //iTunes
@@ -87,15 +70,40 @@ function getDataFromApi(searchTerm) {
       term: `${searchTerm}`,
       country: "US",
     },
+    dataType: "json",
     url: "https://itunes.apple.com/search",
     success: function(data) {
-      console.log(data);
-      /*$("#results").prop("hidden", false).append(`
-        <div>
-          <h2>iTunes info: </h2>
-          <p></p>
-        </div>
-      `)*/
+      $("#results").prop("hidden", false);
+      $("#meaning-results").append(`
+        <audio controls>
+          <source src="${data.results[0].previewUrl}" type="audio/x-m4a">
+        </audio>
+      `)
+    }
+  });
+
+  //SeatGeek
+    $.ajax({
+    type: "GET",
+    data: {
+      client_id: "MTE5ODc4MTZ8MTUyOTQyNjE4MC4wOQ",
+      client_secret: "b178512fb9cf7615fe532cf4391774f3f25bb0acf61ef64a023d6a237e4c10d9",
+      q: `${searchTerm}`,
+    },
+    dataType: "json",
+    url: "https://api.seatgeek.com/2/performers",
+    success: function(data) {
+      if (data.performers[0].has_upcoming_events === false) {
+        $("#results").prop("hidden", false);
+        $("#tour-results").append(`
+          <p>No upcoming shows</p>
+        `)        
+      } else {
+        $("#results").prop("hidden", false);
+        $("#tour-results").append(`
+          <p>Upcoming shows</p>
+        `)      
+      }
     }
   });
 }
@@ -109,59 +117,3 @@ function watchSubmit() {
 }
 
 $(watchSubmit);
-
-/* `
-        <div class="col-4">
-        <div class="searchContainer">
-          <div>
-            <h2>Lyrics</h2>
-
-          </div>   
-        </div>
-      </div>
-      
-      <div class="col-4">
-        <div class="searchContainer">
-          <div>
-            <h2>Meaning</h2>
-
-          </div>        
-        </div>
-      </div>
-      
-      <div class="col-4">
-        <div class="searchContainer">
-          <div>
-            <h2>Watch</h2>
-            <a href="https://www.youtube.com/watch?v=${youtubeID}"><img src="${youtubeThumb}" alt="${youtubeImgAlt}"></a>
-          </div>          
-        </div>
-      </div> 
-      
-      <div class="col-4">
-        <div class="searchContainer">
-          <div>
-            <h2>Reviews</h2>
-
-          </div>          
-        </div>
-      </div>
-      
-      <div class="col-4">
-        <div class="searchContainer">
-          <div>
-            <h2>Artist Info</h2>
-
-          </div>          
-        </div>
-      </div> 
-      
-      <div class="col-4">
-        <div class="searchContainer">
-          <div>
-            <h2>On Tour?</h2>
-
-          </div>          
-        </div>
-      </div>  
-      `*/

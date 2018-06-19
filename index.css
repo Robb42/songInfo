@@ -18,6 +18,11 @@ label {
 	width: 1px;
 }
 
-.searchContainer {
+.resultContainer {
 	border: 1px solid lightgray;
+  height: 400px;
+}
+
+.containerText {
+  color: black;
 }
