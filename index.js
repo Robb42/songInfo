@@ -107,25 +107,6 @@ function getDataFromApi(artistName, songName) {
           <li>Track Length: ${data.message.body.track_list["0"].track.track_length}</li>
         </ul>
       `);
-      $.ajax({
-        type: "GET",
-        data: {
-          apikey: "723d40ea5e7c1abaf24147f2d427939a",
-          track_id: mmTrackId,
-          format: "jsonp",
-        },
-        url: "https://api.musixmatch.com/ws/1.1/track.lyrics.get",
-        dataType: "jsonp",
-        jsonCallback: "jsonp_callback",
-        contentType: "application/json",
-        success: function (lyrics) {
-          console.log(lyrics.message);
-          $("#results").prop("hidden", false);
-          $("#lyrics-results").append(`
-            <p>${lyrics.message.body.lyrics.lyrics_body}</p>
-          `);
-        }
-      });
     },
   });
     
@@ -171,6 +152,15 @@ function getDataFromApi(artistName, songName) {
         `)      
       }
     }
+  });
+
+  //lyrics.ovh
+  $.getJSON(`https://api.lyrics.ovh/v1/${artistName}/${songName}`, function (obj) {
+    console.log(obj);
+    $("#results").prop("hidden", false);
+    $("#lyrics-results").append(`
+      <p>${obj.lyrics}</p>
+    `);
   });
 }
 
