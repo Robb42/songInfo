@@ -32,62 +32,59 @@
 				</form>
 			</section>
 
-			<section role="region" id="results"  aria-live="assertive" hidden>	
+			<section role="dialog" id="confirm-query" class="col-12" aria-live="assertive" hidden>
+				<div class="confirmQueryContainer">
+					<form class="confirmQuery">
+						<Legend>Is this the right song?</Legend>
+						<p></p>
+						<input class="confirmButton" type="button" id="yes-right-song" name="answerYes" value="yes">
+						<input class="confirmButton" type="button" id="no-wrong-song" name="answerNo" value="no">
+					</form>
+				</div>
+			</section>
 
-        <div class="col-4">
-          <div class="resultContainer">
-            <h2>#watch-results</h2>
-            <div id="watch-results" class="watchResults">
-              
-            </div>
-          </div>
-        </div>
+			<section role="region" id="results" aria-live="assertive" hidden>	
+		        <div class="col-4">
+		          <div class="resultContainer">
+		            <h2>#watch-results</h2>
+		            <div id="watch-results" class="watchResults"></div>
+		          </div>
+		        </div>
 
-        <div class="col-4">
-          <div class="resultContainer">
-            <h2>#meaning-results</h2>
-            <div class="meaningResults" id="meaning-results">
-              
-            </div>
-          </div>
-        </div>
+		        <div class="col-4">
+		          <div class="resultContainer">
+		            <h2>#info-results</h2>
+		            <div class="infoResults" id="info-results"></div>
+		          </div>
+		        </div>
 
-        <div class="col-4">
-          <div class="resultContainer">
-            <h2>#lyrics-results</h2>
-            <div class="lyricsResults" id="lyrics-results">
-              
-            </div>
-          </div>
-        </div>
+		        <div class="col-4">
+		          <div class="resultContainer">
+		            <h2>#lyrics-results</h2>
+		            <div class="lyricsResults" id="lyrics-results"></div>
+		          </div>
+		        </div>
 
-        <div class="col-4">
-          <div class="resultContainer">
-            <h2>#artist-results</h2>
-            <div class="artistResults" id="artist-results">
-              
-            </div>
-          </div>
-        </div>
+		        <div class="col-4">
+		          <div class="resultContainer">
+		            <h2>#artist-results</h2>
+		            <div class="artistResults" id="artist-results"></div>
+		          </div>
+		        </div>
 
-        <div class="col-4">
-          <div class="resultContainer">
-            <h2>#info-results</h2>
-            <div class="infoResults" id="info-results">
-              
-            </div>
-          </div>
-        </div>
+		        <div class="col-4">
+		          <div class="resultContainer">
+		            <h2>#tour-results</h2>
+		            <div class="tourResults" id="tour-results"></div>
+		          </div>
+		        </div>
 
-        <div class="col-4">
-          <div class="boxContainer">
-            <h2>#tour-results</h2>
-            <div class="tourResults" id="tour-results">
-              
-            </div>
-          </div>
-        </div>
-
+		        <div class="col-4">
+		          <div class="resultContainer">
+		            <h2>#misc-results</h2>
+		            <div class="miscResults" id="misc-results"></div>
+		          </div>
+		        </div>
 			</section>
 		
 		</div>
