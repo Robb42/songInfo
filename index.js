@@ -1,5 +1,7 @@
 "use strict"
 
+var backgroundImageUrl = "img/audience.jpg";
+
 function getArtistQuery(query) {
   $.ajax({
     type: "GET",
@@ -30,7 +32,6 @@ function confirmQuery(artistName, songName) {
     ${songName} by ${artistName} 
     `)
 }
-
 function watchConfirmClicks() {
   $("#yes-right-song").click(function() {
     getDataFromApi();
@@ -76,6 +77,19 @@ function getDataFromApi(artistName, songName) {
     $("#info-results").append(`
       <p>${obj.query.search[0].snippet}</p>
       <p>Wiki Page: https://en.wikipedia.org/?curid=${obj.query.search[0].pageid}</p>
+    `)
+  });
+  const queryArtistWiki = {
+    action: "query",
+    list: "search",
+    srsearch: `${artistName}`,
+    format: "json",
+    origin: "*"
+  }
+  $.getJSON("https://en.wikipedia.org/w/api.php", queryArtistWiki, function (obj) {
+    $("#results").prop("hidden", false);
+    $("#artist-results").append(`
+      <p>${obj.query.search[0].snippet}</p>
     `)
   });
 
@@ -140,7 +154,7 @@ function getDataFromApi(artistName, songName) {
     dataType: "json",
     url: "https://api.seatgeek.com/2/performers",
     success: function(data) {
-      if (data.performers[0].has_upcoming_events === false) {
+      if (data.performers[0].num_upcoming_events === 0) {
         $("#results").prop("hidden", false);
         $("#tour-results").append(`
           <p>No upcoming shows</p>
@@ -148,7 +162,8 @@ function getDataFromApi(artistName, songName) {
       } else {
         $("#results").prop("hidden", false);
         $("#tour-results").append(`
-          <p>Upcoming shows</p>
+          <h3>Upcoming shows</h3>
+          <p>Buy tickets on <a href="${data.performers[0].url}">SeatGeek</a></p>
         `)      
       }
     }
@@ -156,11 +171,34 @@ function getDataFromApi(artistName, songName) {
 
   //lyrics.ovh
   $.getJSON(`https://api.lyrics.ovh/v1/${artistName}/${songName}`, function (obj) {
-    console.log(obj);
     $("#results").prop("hidden", false);
     $("#lyrics-results").append(`
       <p>${obj.lyrics}</p>
     `);
+  });
+
+  //Bandisintown
+  $.getJSON(`https://rest.bandsintown.com/artists/${artistName}?app_id=c8d76e3370fa422fc61e53c1c69e7402`, function (obj) {
+    console.log(obj);
+    $(".background").css({
+      "background-image": `url(${obj.image_url})`,
+      "background-size": "cover",
+      "height": "100%",
+      "background-position": "top center",
+      "background-repeat": "repeat"
+    });
+    if (obj.upcoming_event_count === 0) {
+      $("#results").prop("hidden", false);
+      $("#tour-results").append(`
+        <p>No upcoming shows</p>
+      `)        
+    } else {
+      $("#results").prop("hidden", false);
+      $("#tour-results").append(`
+        <h3>Upcoming shows</h3>
+        <p>Buy tickets on <a href="${obj.url}">Bandsintown</a></p>
+      `)      
+    }
   });
 }
 
