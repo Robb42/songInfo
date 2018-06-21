@@ -1,19 +1,19 @@
 html {
-  box-sizing: border-box;
-  font-family: "Roboto", Sans-Serif;
+  	box-sizing: border-box;
+  	font-family: "Roboto", Sans-Serif;
 }
 
 *, *:before, *:after {
-  box-sizing: inherit;
+  	box-sizing: inherit;
 }
 
 .background {
-  background-color: black;
-  background-image: url("img/audience.jpg");
-  height: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  	background-color: black;
+  	background-image: url("img/audience.jpg");
+  	height: 100%;
+  	background-position: center;
+  	background-repeat: no-repeat;
+  	background-size: cover;
 }
 
 label {
@@ -27,65 +27,78 @@ label {
 	width: 1px;
 }
 
+fieldset {
+  	border: 0 none;
+  	padding: 0;
+  	margin: 0;
+}
+
 .resultContainer {
-  background-color: rgba(255,255,255,0.6);
+  	background-color: rgba(255,255,255,0.6);
 	border: 1px solid lightgray;
-  border-radius: 25px;
-  height: 300px;
-  overflow: auto;
-  margin-top: 25px;
-  padding: 5px;
+  	border-radius: 25px;
+  	height: 300px;
+  	overflow: auto;
+	margin-top: 25px;
+  	padding: 5px;
 }
 
 .confirmQueryContainer {
-  background-color: rgba(255,255,255,0.6);
+  	background-color: rgba(255,255,255,0.6);
 	border: 1px solid lightgray;
-  border-radius: 25px;
-  height: 400px;
-  overflow: auto;
-  margin-top: 25px;
-  padding: 5px;	
-  margin-left: auto;
-  margin-right: auto;
+  	border-radius: 25px;
+  	height: 600px;
+  	margin-top: 25px;
+  	padding: 5px;	
+  	padding-top: 20px;
+  	margin-left: auto;
+  	margin-right: auto;
+  	text-align: center;
+  	font-size: 0;
 }
 
-input {
-  border: 0;
-  border-top-left-radius: 25px;
-  border-bottom-left-radius: 25px;
-  height: 40px;
-  padding-left: 10px;
-  width: 60%;
+.searchInput {
+  	border: 0;
+  	border-top-left-radius: 25px;
+  	border-bottom-left-radius: 25px;
+  	height: 40px;
+  	padding-left: 10px;
+  	width: 60%;
 }
 
-button {
-  border: 0;
-  border-top-right-radius: 25px;
-  border-bottom-right-radius: 25px;
-  height: 40px;
-  padding-right: 10px;
-  width: 20%;
+.searchButton {
+  	border: 0;
+  	border-top-right-radius: 25px;
+  	border-bottom-right-radius: 25px;
+  	height: 40px;
+  	padding-right: 10px;
+  	width: 20%;
 }
+
+/*.confirmButton {
+  	border: 0;
+  	border-radius: 25px;
+  	height: 60px;
+  	padding-right: 10px;
+  	padding-left: 10px;
+  	width: 80%;
+  	margin-top: 15px;
+}*/
 
 footer {
-  background-color: black;
-  color: white;
-  height: 50px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: right;
-  padding-top: 0px;
-}
-
-.confirmButton {
-	width: 40%;
-	height: 40px;
+  	background-color: black;
+  	color: white;
+  	height: 50px;
+  	position: fixed;
+  	bottom: 0;
+  	width: 100%;
+  	text-align: right;
+  	padding-top: 0px;
 }
 
 #yt-player {
 	width: 80%;
-  border-radius: 25px;
+  	border-radius: 25px;
 }
 
 #preview-player {
@@ -98,4 +111,43 @@ footer {
 
 .meaningResults {
 	text-align: center;
+}
+
+.options {
+	display: inline-block;
+	width: 50%;
+	height: 190px;
+	padding: 0;
+}
+
+.options:hover, .options:focus {
+	background: rgba(70,115,184,0.6);
+}
+
+.optionOne, .optionThree, .optionFive {
+	float: left;
+}
+
+.optionTwo, .optionFour, .optionSix {
+	float: right;
+}
+
+.options > h3, .options > h4, .options > p {
+	font-size: 12px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
+.options > h4 {
+	margin-bottom: 15px;
+}
+
+.options > h3 {
+	margin-top: 15px;
+}
+
+.confirmTitle {
+	display: block;
+	float: inline-start;
+	width: 100%;
 }

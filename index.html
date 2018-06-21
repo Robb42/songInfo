@@ -27,19 +27,37 @@
 			<section role="search" id="search" class="col-12">
 				<form action="#" id="js-search-form">
 					<label for="song-search">Enter a song title here</label>
-					<input type="text" id="song-search" placeholder="Enter a song title here" name="Song Search">
-					<button>Get</button>
+					<input class="searchInput" type="text" id="song-search" placeholder="Enter a song title here" name="Song Search">
+					<button class="searchButton">Get</button>
 				</form>
 			</section>
 
 			<section role="dialog" id="confirm-query" class="col-12" aria-live="assertive" hidden>
 				<div class="confirmQueryContainer">
-					<form class="confirmQuery">
-						<Legend>Is this the right song?</Legend>
-						<p></p>
-						<input class="confirmButton" type="button" id="yes-right-song" name="answerYes" value="yes">
-						<input class="confirmButton" type="button" id="no-wrong-song" name="answerNo" value="no">
-					</form>
+					<div class="confirmTitle">
+						<h3>Which song are you searching for?</h3>
+					</div>
+					<div class="options optionOne" id="option-one"></div>
+					<div class="options optionTwo" id="option-two"></div>
+					<div class="options optionThree" id="option-three"></div>
+					<div class="options optionFour" id="option-four"></div>
+					<div class="options optionFive" id="option-five"></div>
+					<div class="options optionSix" id="option-six"></div>
+					<!--<form class="confirmQuery" id="js-confirm-form">
+						<fieldset name="confirm-dialog">
+							<Legend class="confirmLegend" id="js-confirm-legend">Which song are you searching for?</Legend>
+							<input class="confirmButton" type="radio" id="js-confirm-1" name="cofirmAnswer1" value="Option 1">
+							<label for='js-confirm-1'></label><br>
+							<input class="confirmButton" type="radio" id="js-confirm-2" name="cofirmAnswer1" value="Option 2">
+							<label for="js-confirm-2"></label><br>
+							<input class="confirmButton" type="radio" id="js-confirm-3" name="cofirmAnswer1" value="Option 3">
+							<label for="js-confirm-3"></label><br>
+							<input class="confirmButton" type="radio" id="js-confirm-4" name="cofirmAnswer1" value="Option 4">
+							<label for="js-confirm-4"></label><br>
+							<input class="confirmButton" type="radio" id="js-confirm-5" name="cofirmAnswer1" value="Option 5">
+							<label for="js-confirm-5"></label><br>
+						</fieldset>
+					</form>-->
 				</div>
 			</section>
 

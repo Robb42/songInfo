@@ -1,50 +1,71 @@
 "use strict"
 
 var backgroundImageUrl = "img/audience.jpg";
+var songName = "";
+var artistName = "";
 
 function getArtistQuery(query) {
+  //function to match song title with artist and gather search results
   $.ajax({
     type: "GET",
     data: {
-      apikey: "723d40ea5e7c1abaf24147f2d427939a",
-      q_track: `${query}`,
-      s_track_rating: "DESC", 
-      format: "jsonp",
-      callback: "jsonp_callback"
+      term: `${query}`,
+      country: "US",
     },
-    url: "https://api.musixmatch.com/ws/1.1/track.search",
-    dataType: "jsonp",
-    jsonpCallback: "jsonp_callback",
-    contentType: "application/json",
-    success: function(data) {
-      let querySongName = query;
-      let queryArtistName = data.message.body.track_list[0].track.artist_name;
-      //confirmQuery(queryArtistName, querySongName);
-      getDataFromApi(queryArtistName, querySongName);
+    dataType: "json",
+    url: "https://itunes.apple.com/search",
+      success: function(data) {
+        const songResultsArr = [];
+        const artistResultsArr = [];
+        const albumResultsArr = [];
+        const artResultsArr = [];
+        for (let i = 0; i < 6; i++) {
+          songResultsArr.push(data.results[i].trackName);
+          artistResultsArr.push(data.results[i].artistName);
+          albumResultsArr.push(data.results[i].collectionName);
+          artResultsArr.push(data.results[i].artworkUrl100);
+        }
+      confirmQuery(songResultsArr, artistResultsArr, albumResultsArr, artResultsArr);
     }
   });
 }
 
-/*
-function confirmQuery(artistName, songName) {
+function confirmQuery(songArray, artistArray, albumArray, artArray) {
   $("#confirm-query").prop("hidden", false);
-  $(".confirmQuery p:first").append(`
-    ${songName} by ${artistName} 
-    `)
+  $("#option-one").append(`
+    <h3>${songArray[0]}</h3>
+    <h4>${artistArray[0]}</h4>
+    <p><img src=${artArray[0]}></p>
+    `);
+  $("#option-two").append(`
+    <h3>${songArray[1]}</h3>
+    <h4>${artistArray[1]}</h4>
+    <p><img src=${artArray[1]}></p>
+    `);
+  $("#option-three").append(`
+    <h3>${songArray[2]}</h3>
+    <h4>${artistArray[2]}</h4>
+    <p><img src=${artArray[2]}></p>
+    `);
+  $("#option-four").append(`
+    <h3>${songArray[3]}</h3>
+    <h4>${artistArray[3]}</h4>
+    <p><img src=${artArray[3]}></p>
+    `);
+  $("#option-five").append(`
+    <h3>${songArray[4]}</h3>
+    <h4>${artistArray[4]}</h4>
+    <p><img src=${artArray[4]}></p>
+    `);
+  $("#option-six").append(`
+    <h3>${songArray[5]}</h3>
+    <h4>${artistArray[5]}</h4>
+    <p><img src=${artArray[5]}></p>
+    `);
 }
-function watchConfirmClicks() {
-  $("#yes-right-song").click(function() {
-    getDataFromApi();
-  });
-  $("#no-wrong-song").click(function() {
-    $("#confirm-query").prop("hidden", true);
-  });
-}
-*/
 
-function getDataFromApi(artistName, songName) {
-  
-  //Youtube API
+function getWatchResults(artistName, songName) {
+  //get videos from Youtube
   const queryYoutube = {
     part: "snippet",
     key: "AIzaSyBZcoFcX2hjtIRehNbhQyocEprrx2cOAfM",
@@ -63,8 +84,10 @@ function getDataFromApi(artistName, songName) {
       <iframe id="yt-player" type="text/html" src="https://www.youtube.com/embed/${obj.items[4].id.videoId}"></iframe>
     `);
   });
-  
-  //Wikipedia API
+}
+
+function getInfoResults(artistName, songName) {
+  //get info from iTunes, Wiki and Musixmatch
   const queryWiki = {
     action: "query",
     list: "search",
@@ -79,22 +102,7 @@ function getDataFromApi(artistName, songName) {
       <p>Wiki Page: https://en.wikipedia.org/?curid=${obj.query.search[0].pageid}</p>
     `)
   });
-  const queryArtistWiki = {
-    action: "query",
-    list: "search",
-    srsearch: `${artistName}`,
-    format: "json",
-    origin: "*"
-  }
-  $.getJSON("https://en.wikipedia.org/w/api.php", queryArtistWiki, function (obj) {
-    $("#results").prop("hidden", false);
-    $("#artist-results").append(`
-      <p>${obj.query.search[0].snippet}</p>
-    `)
-  });
-
-  //Musixmatch API
-    $.ajax({
+  $.ajax({
     type: "GET",
     data: {
       apikey: "723d40ea5e7c1abaf24147f2d427939a",
@@ -123,8 +131,6 @@ function getDataFromApi(artistName, songName) {
       `);
     },
   });
-    
-  //iTunes
   $.ajax({
     type: "GET",
     data: {
@@ -142,9 +148,38 @@ function getDataFromApi(artistName, songName) {
       `)
     }
   });
+}
 
-  //SeatGeek
-    $.ajax({
+function getLyricsResults(artistName, songName) {
+  //get lyrics from lyrics.ovh
+  $.getJSON(`https://api.lyrics.ovh/v1/${artistName}/${songName}`, function (obj) {
+    $("#results").prop("hidden", false);
+    $("#lyrics-results").append(`
+      <p>${obj.lyrics}</p>
+    `);
+  });
+}
+
+function getArtistResults(artistName, songName) {
+  //get artist info from Wiki
+  const queryArtistWiki = {
+    action: "query",
+    list: "search",
+    srsearch: `${artistName}`,
+    format: "json",
+    origin: "*"
+  }
+  $.getJSON("https://en.wikipedia.org/w/api.php", queryArtistWiki, function (obj) {
+    $("#results").prop("hidden", false);
+    $("#artist-results").append(`
+      <p>${obj.query.search[0].snippet}</p>
+    `)
+  });
+}
+
+function getTourResults(artistName, songName) {
+  //get info from Bandsintown and Seatgeek APIs
+  $.ajax({
     type: "GET",
     data: {
       client_id: "MTE5ODc4MTZ8MTUyOTQyNjE4MC4wOQ",
@@ -168,18 +203,7 @@ function getDataFromApi(artistName, songName) {
       }
     }
   });
-
-  //lyrics.ovh
-  $.getJSON(`https://api.lyrics.ovh/v1/${artistName}/${songName}`, function (obj) {
-    $("#results").prop("hidden", false);
-    $("#lyrics-results").append(`
-      <p>${obj.lyrics}</p>
-    `);
-  });
-
-  //Bandisintown
   $.getJSON(`https://rest.bandsintown.com/artists/${artistName}?app_id=c8d76e3370fa422fc61e53c1c69e7402`, function (obj) {
-    console.log(obj);
     $(".background").css({
       "background-image": `url(${obj.image_url})`,
       "background-size": "cover",
@@ -202,14 +226,65 @@ function getDataFromApi(artistName, songName) {
   });
 }
 
-function watchSubmit() {
+function getMiscResults(artistName, songName) {
+  //coming soon
+}
+
+function getDataFromApis(artistName, songName) {
+  //get data from APIs
+  getWatchResults(artistName, songName);
+  getInfoResults(artistName, songName);
+  getLyricsResults(artistName, songName);
+  getArtistResults(artistName, songName);
+  getTourResults(artistName, songName);
+  getMiscResults(artistName, songName);
+}
+
+function watchClicks() {
+  //watch main search submit button
   $("#js-search-form").submit(function () {
     event.preventDefault();
     const query = $("#song-search").val();
-    //getDataFromApi(query);
     getArtistQuery(query);
+  });
+
+  //watch confirmation dialog box response
+  $("#option-one").click(function() {
+    songName = $("#option-one").find("h3").text();
+    artistName = $("#option-one").find("h3").siblings("h4").text();
+    $("#confirm-query").prop("hidden", true);
+    getDataFromApis(artistName, songName);
+  });
+  $("#option-two").click(function() {
+    songName = $("#option-two").find("h3").text();
+    artistName = $("#option-two").find("h3").siblings("h4").text();
+    $("#confirm-query").prop("hidden", true);
+    getDataFromApis(artistName, songName);
+  });
+  $("#option-three").click(function() {
+    songName = $("#option-three").find("h3").text();
+    artistName = $("#option-three").find("h3").siblings("h4").text();
+    $("#confirm-query").prop("hidden", true);
+    getDataFromApis(artistName, songName);
+  });
+  $("#option-four").click(function() {
+    songName = $("#option-four").find("h3").text();
+    artistName = $("#option-four").find("h3").siblings("h4").text();
+    $("#confirm-query").prop("hidden", true);
+    getDataFromApis(artistName, songName);
+  });
+  $("#option-five").click(function() {
+    songName = $("#option-five").find("h3").text();
+    artistName = $("#option-five").find("h3").siblings("h4").text();
+    $("#confirm-query").prop("hidden", true);
+    getDataFromApis(artistName, songName);
+  });
+  $("#option-six").click(function() {
+    songName = $("#option-six").find("h3").text();
+    artistName = $("#option-six").find("h3").siblings("h4").text();
+    $("#confirm-query").prop("hidden", true);
+    getDataFromApis(artistName, songName);
   });
 }
 
-$(watchSubmit);
-$(watchConfirmClicks);
+$(watchClicks);
