@@ -12,7 +12,6 @@ function getArtistQuery(query) {
       term: `${query}`,
       country: "US"
     },
-    origin: "*",
     dataType: "json",
     url: "https://itunes.apple.com/search",
       success: function(data) {
