@@ -10,8 +10,9 @@ function getArtistQuery(query) {
     type: "GET",
     data: {
       term: `${query}`,
-      country: "US",
+      country: "US"
     },
+    origin: "*",
     dataType: "json",
     url: "https://itunes.apple.com/search",
       success: function(data) {
@@ -244,7 +245,15 @@ function watchClicks() {
   //watch main search submit button
   $("#js-search-form").submit(function () {
     event.preventDefault();
+    $("#watch-results").empty();
+    $("#info-results").empty();
+    $("#lyrics-results").empty();
+    $("#artist-results").empty();
+    $("#tour-results").empty();
+    $("#misc-results").empty();
+    $("#results").prop("hidden", true);
     const query = $("#song-search").val();
+    $("#song-search").val("");
     getArtistQuery(query);
   });
 

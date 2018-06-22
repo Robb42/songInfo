@@ -1,78 +1,78 @@
 html {
-  	box-sizing: border-box;
-  	font-family: "Roboto", Sans-Serif;
+	box-sizing: border-box;
+	font-family: "Roboto", Sans-Serif;
 }
 
 *, *:before, *:after {
-  	box-sizing: inherit;
+  box-sizing: inherit;
 }
 
 .background {
-  	background-color: black;
-  	background-image: url("img/audience.jpg");
-  	height: 100%;
-  	background-position: center;
-  	background-repeat: no-repeat;
-  	background-size: cover;
+	background-color: black;
+	background-image: url("img/audience.jpg");
+	height: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 label {
-	border: 0;
-	clip: rect(0 0 0 0);
-	height: 1px;
-	margin: -1px;
-	overflow: hidden;
-	padding: 0;
-	position: absolute;
-	width: 1px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 
 fieldset {
-  	border: 0 none;
-  	padding: 0;
-  	margin: 0;
+  border: 0 none;
+  padding: 0;
+  margin: 0;
 }
 
 .resultContainer {
-  	background-color: rgba(255,255,255,0.6);
+  background-color: rgba(255,255,255,0.6);
 	border: 1px solid lightgray;
-  	border-radius: 25px;
-  	height: 300px;
-  	overflow: auto;
+  border-radius: 25px;
+  height: 300px;
+  overflow: auto;
 	margin-top: 25px;
-  	padding: 5px;
+  padding: 5px;
 }
 
 .confirmQueryContainer {
-  	background-color: rgba(255,255,255,0.6);
+  background-color: rgba(255,255,255,0.6);
 	border: 1px solid lightgray;
-  	border-radius: 25px;
-  	height: 600px;
-  	margin-top: 25px;
-  	padding: 5px;	
-  	padding-top: 20px;
-  	margin-left: auto;
-  	margin-right: auto;
-  	text-align: center;
-  	font-size: 0;
+  border-radius: 25px;
+  height: 600px;
+  margin-top: 25px;
+  padding: 5px;	
+  padding-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: 0;
 }
 
 .searchInput {
-  	border: 0;
-  	border-top-left-radius: 25px;
-  	border-bottom-left-radius: 25px;
-  	height: 40px;
-  	padding-left: 10px;
-  	width: 60%;
+	border: 0;
+	border-top-left-radius: 25px;
+	border-bottom-left-radius: 25px;
+	height: 40px;
+	padding-left: 10px;
+	width: 60%;
 }
 
 .searchButton {
-  	border: 0;
-  	border-top-right-radius: 25px;
-  	border-bottom-right-radius: 25px;
-  	height: 40px;
-  	padding-right: 10px;
-  	width: 20%;
+	border: 0;
+	border-top-right-radius: 25px;
+	border-bottom-right-radius: 25px;
+	height: 40px;
+	padding-right: 10px;
+	width: 20%;
 }
 
 /*.confirmButton {
@@ -86,19 +86,19 @@ fieldset {
 }*/
 
 footer {
-  	background-color: black;
-  	color: white;
-  	height: 50px;
-  	position: fixed;
-  	bottom: 0;
-  	width: 100%;
-  	text-align: right;
-  	padding-top: 0px;
+	background-color: black;
+	color: white;
+	height: 50px;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	text-align: right;
+	padding-top: 0px;
 }
 
 #yt-player {
 	width: 80%;
-  	border-radius: 25px;
+  border-radius: 25px;
 }
 
 #preview-player {
