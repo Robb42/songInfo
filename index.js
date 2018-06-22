@@ -251,6 +251,12 @@ function watchClicks() {
     $("#artist-results").empty();
     $("#tour-results").empty();
     $("#misc-results").empty();
+    $("#option-one").empty();
+    $("#option-two").empty();
+    $("#option-three").empty();
+    $("#option-four").empty();
+    $("#option-five").empty();
+    $("#option-six").empty();
     $("#results").prop("hidden", true);
     const query = $("#song-search").val();
     $("#song-search").val("");
