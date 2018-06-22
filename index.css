@@ -147,7 +147,8 @@ footer {
 }
 
 .confirmTitle {
+  font-size: 20px;
 	display: block;
-	float: inline-start;
 	width: 100%;
+  text-align: center;
 }
