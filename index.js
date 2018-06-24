@@ -76,6 +76,97 @@ function changeBackground(artistName) {
   });
 }
 
+function getSongPreview (artistName, songName) {
+  $.ajax({
+    type: "GET",
+    data: {
+      term: `${songName} ${artistName}`,
+      country: "US",
+    },
+    dataType: "json",
+    url: "https://itunes.apple.com/search",
+    success: function(data) {
+      $("#results").prop("hidden", false);
+      $("#song-preview").append(`
+        <audio class= "previewPlayer" id="preview-player"autoplay hidden>
+          <source src="${data.results[0].previewUrl}" type="audio/x-m4a">
+        </audio>
+      `)
+    }
+  });
+}
+
+function getMiscResults(artistName, songName) {
+  //get song facts from musixmatch and artwork from iTunes
+  $.ajax({
+    type: "GET",
+    data: {
+      apikey: "723d40ea5e7c1abaf24147f2d427939a",
+      q_track: `${songName}`,
+      q_artist: `${artistName}`,
+      s_track_rating: "DESC", 
+      format: "jsonp",
+      callback: "jsonp_callback"
+    },
+    url: "https://api.musixmatch.com/ws/1.1/track.search",
+    dataType: "jsonp",
+    jsonpCallback: "jsonp_callback",
+    contentType: "application/json",
+    success: function(data) {
+      console.log(data);
+      let mmTrackId = data.message.body.track_list[0].track.track_id;
+      let releaseDate = new Date(data.message.body.track_list[0].track.first_release_date);
+      let convertedRelease = `${releaseDate.getMonth()+1}/${releaseDate.getDate()}/${releaseDate.getFullYear()}`;
+      let trackLength = data.message.body.track_list[0].track.track_length;
+      let minutes = Math.floor(trackLength / 60);
+      let seconds = trackLength - minutes * 60;
+      $("#results").prop("hidden", false);
+      $("#misc-results").append(`
+        <ul class="infoStyle">
+          <li><b>Name:</b><br> ${data.message.body.track_list[0].track.track_name}<br><br></li>
+          <li><b>Artist:</b><br> ${data.message.body.track_list[0].track.artist_name}<br><br></li>
+          <li><b>Album:</b><br> ${data.message.body.track_list[0].track.album_name}<br><br></li>
+          <li><b>Release Date:</b><br> ${convertedRelease}<br><br></li>
+          <li><b>Genre:</b><br> ${data.message.body.track_list[0].track.primary_genres.music_genre_list[0].music_genre.music_genre_name}<br><br></li>
+          <li><b>Track Length:</b><br> ${minutes}:${seconds}<br><br></li>
+        </ul>
+      `);
+    },
+  });
+  $.ajax({
+    type: "GET",
+    data: {
+      term: `${songName} ${artistName}`,
+      country: "US"
+    },
+    dataType: "json",
+    url: "https://itunes.apple.com/search",
+      success: function(data) {
+        $("#results").prop("hidden", false);
+        $("#misc-results").prepend(`
+          <img class="artworkImg" src="${data.results[0].artworkUrl100}" alt="Album Artwork">
+          `)
+    }
+  });
+}
+
+function getInfoResults(artistName, songName) {
+  //get song info from wiki
+  const queryWiki = {
+    action: "query",
+    list: "search",
+    srsearch: `${songName} ${artistName}`,
+    format: "json",
+    origin: "*"
+  }
+  $.getJSON("https://en.wikipedia.org/w/api.php", queryWiki, function (obj) {
+    $("#results").prop("hidden", false);
+    $("#info-results").append(`
+      <iframe id="wiki-player-song" type="text/html" scrolling="auto" src="http://en.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
+    `)
+  });
+}
+
 function getWatchResults(artistName, songName) {
   //get videos from Youtube
   const queryYoutube = {
@@ -98,23 +189,6 @@ function getWatchResults(artistName, songName) {
   });
 }
 
-function getInfoResults(artistName, songName) {
-  //get song info from wiki
-  const queryWiki = {
-    action: "query",
-    list: "search",
-    srsearch: `${songName} ${artistName}`,
-    format: "json",
-    origin: "*"
-  }
-  $.getJSON("https://en.wikipedia.org/w/api.php", queryWiki, function (obj) {
-    $("#results").prop("hidden", false);
-    $("#info-results").append(`
-      <iframe id="wiki-player-song" type="text/html" scrolling="auto" src="http://en.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
-    `)
-  });
-}
-
 function getLyricsResults(artistName, songName) {
   //get lyrics from lyrics.ovh
   $.getJSON(`https://api.lyrics.ovh/v1/${artistName}/${songName}`, function (obj) {
@@ -122,25 +196,8 @@ function getLyricsResults(artistName, songName) {
     let formattedString = lyricsString.replace(/\n/g, "<br />");
     $("#results").prop("hidden", false);
     $("#lyrics-results").append(`
-      <p>${formattedString}</p>
+      <p class="lyricsStyle">${formattedString}</p>
     `);
-  });
-}
-
-function getArtistResults(artistName, songName) {
-  //get artist info from Wiki
-  const queryArtistWiki = {
-    action: "query",
-    list: "search",
-    srsearch: `${artistName}`,
-    format: "json",
-    origin: "*"
-  }
-  $.getJSON("https://en.wikipedia.org/w/api.php", queryArtistWiki, function (obj) {
-    $("#results").prop("hidden", false);
-    $("#artist-results").append(`
-      <iframe id="wiki-player-artist" type="text/html" scrolling="auto" src="http://en.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
-    `)
   });
 }
 
@@ -164,59 +221,27 @@ function getTourResults(artistName, songName) {
   });
 }
 
-function getMiscResults(artistName, songName) {
-  //get song facts from musixmatch and audio preview from itunes
-  $.ajax({
-    type: "GET",
-    data: {
-      apikey: "723d40ea5e7c1abaf24147f2d427939a",
-      q_track: `${songName}`,
-      q_artist: `${artistName}`,
-      s_track_rating: "DESC", 
-      format: "jsonp",
-      callback: "jsonp_callback"
-    },
-    url: "https://api.musixmatch.com/ws/1.1/track.search",
-    dataType: "jsonp",
-    jsonpCallback: "jsonp_callback",
-    contentType: "application/json",
-    success: function(data) {
-      let mmTrackId = data.message.body.track_list["0"].track.track_id;
-      $("#results").prop("hidden", false);
-      $("#misc-results").append(`
-        <ul>
-          <li>Name: ${data.message.body.track_list["0"].track.track_name}</li>
-          <li>Artist: ${data.message.body.track_list["0"].track.artist_name}</li>
-          <li>Album: ${data.message.body.track_list["0"].track.album_name}</li>
-          <li>Release Date: ${data.message.body.track_list["0"].track.first_release_date}</li>
-          <li>Genre: ${data.message.body.track_list["0"].track.primary_genres.music_genre_list[0].music_genre.music_genre_name}</li>
-          <li>Track Length: ${data.message.body.track_list["0"].track.track_length}</li>
-        </ul>
-      `);
-    },
-  });
-  $.ajax({
-    type: "GET",
-    data: {
-      term: `${songName} ${artistName}`,
-      country: "US",
-    },
-    dataType: "json",
-    url: "https://itunes.apple.com/search",
-    success: function(data) {
-      $("#results").prop("hidden", false);
-      $("#misc-results").append(`
-        <audio id="preview-player" controls autoplay>
-          <source src="${data.results[0].previewUrl}" type="audio/x-m4a">
-        </audio>
-      `)
-    }
+function getArtistResults(artistName, songName) {
+  //get artist info from Wiki
+  const queryArtistWiki = {
+    action: "query",
+    list: "search",
+    srsearch: `${artistName}`,
+    format: "json",
+    origin: "*"
+  }
+  $.getJSON("https://en.wikipedia.org/w/api.php", queryArtistWiki, function (obj) {
+    $("#results").prop("hidden", false);
+    $("#artist-results").append(`
+      <iframe id="wiki-player-artist" type="text/html" scrolling="auto" src="http://en.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
+    `)
   });
 }
 
 function getDataFromApis(artistName, songName) {
   //get data from APIs
   changeBackground(artistName);
+  getSongPreview(artistName, songName);
   getWatchResults(artistName, songName);
   getInfoResults(artistName, songName);
   getLyricsResults(artistName, songName);

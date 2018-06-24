@@ -7,6 +7,7 @@
 
 	<title>SongInfo</title>
 	
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Andika|Give+You+Glory|Lemonada|Expletus+Sans" >
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
 	<link rel="stylesheet" type="text/css" href="index.css">
 	<link rel="stylesheet" type="text/css" href="float-grid.css">
@@ -16,7 +17,7 @@
 
 	<header role="banner">
 		<div class="row">
-			<div class="col-12">
+			<div class="col-12 headerBox songPreview" id="song-preview">
 				<h1>SongInfo</h1>
 			</div>
 		</div>
@@ -24,11 +25,11 @@
 
 	<main role="main">
 		<div class="row">
-			<section role="search" id="search" class="col-12">
+			<section role="search" id="search" class="col-12 searchContainer">
 				<form action="#" id="js-search-form">
 					<label for="song-search">Enter a song title here</label>
 					<input class="searchInput" type="text" id="song-search" placeholder="Enter a song title here" name="Song Search">
-					<button class="searchButton">Get</button>
+					<button class="searchButton">Get Info</button>
 				</form>
 			</section>
 
@@ -47,47 +48,49 @@
 			</section>
 
 			<section role="region" id="results" aria-live="assertive" hidden>	
-		        <div class="col-4">
-		          <div class="resultContainer">
-		            <h2>#watch-results</h2>
-		            <div id="watch-results" class="watchResults"></div>
+
+				<div class="col-4">
+		          <div class="resultContainer overflowNo">
+		            <!--<h2>#misc-results</h2>-->
+		            <div class="miscResults" id="misc-results"></div>
 		          </div>
 		        </div>
 
-		        <div class="col-4">
-		          <div class="resultContainer">
+		        <div class="col-8">
+		          <div class="resultContainer overflowNo">
 		            <!--<h2>#info-results</h2>-->
 		            <div class="infoResults" id="info-results"></div>
 		          </div>
 		        </div>
 
-		        <div class="col-4">
-		          <div class="resultContainer">
-		            <h2>#lyrics-results</h2>
+		        <div class="col-6">
+		          <div class="resultContainer overflowYes">
+		            <h2 class="resultTitles">Watch</h2>
+		            <div id="watch-results" class="watchResults"></div>
+		          </div>
+		        </div>  
+
+		       	<div class="col-6">
+		          <div class="resultContainer overflowYes">
+		            <h2 class="resultTitles">Lyrics<h2>
 		            <div class="lyricsResults" id="lyrics-results"></div>
 		          </div>
 		        </div>
-
-		        <div class="col-4">
-		          <div class="resultContainer">
-		            <!--<h2>#artist-results</h2>-->
-		            <div class="artistResults" id="artist-results"></div>
-		          </div>
-		        </div>
-
-		        <div class="col-4">
-		          <div class="resultContainer">
+		        
+		        <div class="col-12">
+		          <div class="resultContainer overflowNo">
 		            <!--<h2>#tour-results</h2>-->
 		            <div class="tourResults" id="tour-results"></div>
 		          </div>
 		        </div>
 
-		        <div class="col-4">
-		          <div class="resultContainer">
-		            <h2>#misc-results</h2>
-		            <div class="miscResults" id="misc-results"></div>
+		        <div class="col-12">
+		          <div class="resultContainer overflowNo lastContainer">
+		            <!--<h2>#artist-results</h2>-->
+		            <div class="artistResults" id="artist-results"></div>
 		          </div>
 		        </div>
+
 			</section>
 		
 		</div>
@@ -95,7 +98,7 @@
 
 	<footer role="contentinfo">
 		<div class="row">
-			<div class="col-12">
+			<div class="col-12 footerStyle">
 				<p>Created by Rob Bertini</p>
 			</div>
 		</div>
