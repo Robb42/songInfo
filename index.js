@@ -64,6 +64,18 @@ function confirmQuery(songArray, artistArray, albumArray, artArray) {
     `);
 }
 
+function changeBackground(artistName) {
+  $.getJSON(`https://rest.bandsintown.com/artists/${artistName}?app_id=c8d76e3370fa422fc61e53c1c69e7402`, function (obj) {
+    $(".background").css({
+      "background-image": `url(${obj.image_url})`,
+      "background-size": "cover",
+      "height": "100%",
+      "background-position": "top center",
+      "background-repeat": "repeat"
+    });
+  });
+}
+
 function getWatchResults(artistName, songName) {
   //get videos from Youtube
   const queryYoutube = {
@@ -87,7 +99,7 @@ function getWatchResults(artistName, songName) {
 }
 
 function getInfoResults(artistName, songName) {
-  //get info from iTunes, Wiki and Musixmatch
+  //get song info from wiki
   const queryWiki = {
     action: "query",
     list: "search",
@@ -98,10 +110,62 @@ function getInfoResults(artistName, songName) {
   $.getJSON("https://en.wikipedia.org/w/api.php", queryWiki, function (obj) {
     $("#results").prop("hidden", false);
     $("#info-results").append(`
-      <p>${obj.query.search[0].snippet}</p>
-      <p>Wiki Page: https://en.wikipedia.org/?curid=${obj.query.search[0].pageid}</p>
+      <iframe id="wiki-player-song" type="text/html" scrolling="auto" src="http://en.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
     `)
   });
+}
+
+function getLyricsResults(artistName, songName) {
+  //get lyrics from lyrics.ovh
+  $.getJSON(`https://api.lyrics.ovh/v1/${artistName}/${songName}`, function (obj) {
+    let lyricsString = obj.lyrics;
+    let formattedString = lyricsString.replace(/\n/g, "<br />");
+    $("#results").prop("hidden", false);
+    $("#lyrics-results").append(`
+      <p>${formattedString}</p>
+    `);
+  });
+}
+
+function getArtistResults(artistName, songName) {
+  //get artist info from Wiki
+  const queryArtistWiki = {
+    action: "query",
+    list: "search",
+    srsearch: `${artistName}`,
+    format: "json",
+    origin: "*"
+  }
+  $.getJSON("https://en.wikipedia.org/w/api.php", queryArtistWiki, function (obj) {
+    $("#results").prop("hidden", false);
+    $("#artist-results").append(`
+      <iframe id="wiki-player-artist" type="text/html" scrolling="auto" src="http://en.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
+    `)
+  });
+}
+
+function getTourResults(artistName, songName) {
+  //get info from Bandsintown and Seatgeek APIs
+  $.ajax({
+    type: "GET",
+    data: {
+      client_id: "MTE5ODc4MTZ8MTUyOTQyNjE4MC4wOQ",
+      client_secret: "b178512fb9cf7615fe532cf4391774f3f25bb0acf61ef64a023d6a237e4c10d9",
+      q: `${artistName}`,
+    },
+    dataType: "json",
+    url: "https://api.seatgeek.com/2/performers",
+    success: function(data) {
+      $("#results").prop("hidden", false);
+      $("#tour-results").append(`
+        <iframe id="seatgeek-player" type="text/html" scrolling="auto" src="${data.performers[0].url}"></iframe>
+        `)
+    }
+  });
+}
+
+function getMiscResults(artistName, songName) {
+  //get song facts from musixmatch and audio preview from itunes
   $.ajax({
     type: "GET",
     data: {
@@ -119,7 +183,7 @@ function getInfoResults(artistName, songName) {
     success: function(data) {
       let mmTrackId = data.message.body.track_list["0"].track.track_id;
       $("#results").prop("hidden", false);
-      $("#info-results").append(`
+      $("#misc-results").append(`
         <ul>
           <li>Name: ${data.message.body.track_list["0"].track.track_name}</li>
           <li>Artist: ${data.message.body.track_list["0"].track.artist_name}</li>
@@ -141,7 +205,7 @@ function getInfoResults(artistName, songName) {
     url: "https://itunes.apple.com/search",
     success: function(data) {
       $("#results").prop("hidden", false);
-      $("#info-results").append(`
+      $("#misc-results").append(`
         <audio id="preview-player" controls autoplay>
           <source src="${data.results[0].previewUrl}" type="audio/x-m4a">
         </audio>
@@ -150,88 +214,9 @@ function getInfoResults(artistName, songName) {
   });
 }
 
-function getLyricsResults(artistName, songName) {
-  //get lyrics from lyrics.ovh
-  $.getJSON(`https://api.lyrics.ovh/v1/${artistName}/${songName}`, function (obj) {
-    $("#results").prop("hidden", false);
-    $("#lyrics-results").append(`
-      <p>${obj.lyrics}</p>
-    `);
-  });
-}
-
-function getArtistResults(artistName, songName) {
-  //get artist info from Wiki
-  const queryArtistWiki = {
-    action: "query",
-    list: "search",
-    srsearch: `${artistName}`,
-    format: "json",
-    origin: "*"
-  }
-  $.getJSON("https://en.wikipedia.org/w/api.php", queryArtistWiki, function (obj) {
-    $("#results").prop("hidden", false);
-    $("#artist-results").append(`
-      <p>${obj.query.search[0].snippet}</p>
-    `)
-  });
-}
-
-function getTourResults(artistName, songName) {
-  //get info from Bandsintown and Seatgeek APIs
-  $.ajax({
-    type: "GET",
-    data: {
-      client_id: "MTE5ODc4MTZ8MTUyOTQyNjE4MC4wOQ",
-      client_secret: "b178512fb9cf7615fe532cf4391774f3f25bb0acf61ef64a023d6a237e4c10d9",
-      q: `${artistName}`,
-    },
-    dataType: "json",
-    url: "https://api.seatgeek.com/2/performers",
-    success: function(data) {
-      if (data.performers[0].num_upcoming_events === 0) {
-        $("#results").prop("hidden", false);
-        $("#tour-results").append(`
-          <p>No upcoming shows</p>
-        `)        
-      } else {
-        $("#results").prop("hidden", false);
-        $("#tour-results").append(`
-          <h3>Upcoming shows</h3>
-          <p>Buy tickets on <a href="${data.performers[0].url}">SeatGeek</a></p>
-        `)      
-      }
-    }
-  });
-  $.getJSON(`https://rest.bandsintown.com/artists/${artistName}?app_id=c8d76e3370fa422fc61e53c1c69e7402`, function (obj) {
-    $(".background").css({
-      "background-image": `url(${obj.image_url})`,
-      "background-size": "cover",
-      "height": "100%",
-      "background-position": "top center",
-      "background-repeat": "repeat"
-    });
-    if (obj.upcoming_event_count === 0) {
-      $("#results").prop("hidden", false);
-      $("#tour-results").append(`
-        <p>No upcoming shows</p>
-      `)        
-    } else {
-      $("#results").prop("hidden", false);
-      $("#tour-results").append(`
-        <h3>Upcoming shows</h3>
-        <p>Buy tickets on <a href="${obj.url}">Bandsintown</a></p>
-      `)      
-    }
-  });
-}
-
-function getMiscResults(artistName, songName) {
-  //coming soon
-}
-
 function getDataFromApis(artistName, songName) {
   //get data from APIs
+  changeBackground(artistName);
   getWatchResults(artistName, songName);
   getInfoResults(artistName, songName);
   getLyricsResults(artistName, songName);

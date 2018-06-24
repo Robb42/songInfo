@@ -40,7 +40,7 @@ fieldset {
   height: 300px;
   overflow: auto;
 	margin-top: 25px;
-  padding: 5px;
+  padding: 0;
 }
 
 .confirmQueryContainer {
@@ -75,16 +75,6 @@ fieldset {
 	width: 20%;
 }
 
-/*.confirmButton {
-  	border: 0;
-  	border-radius: 25px;
-  	height: 60px;
-  	padding-right: 10px;
-  	padding-left: 10px;
-  	width: 80%;
-  	margin-top: 15px;
-}*/
-
 footer {
 	background-color: black;
 	color: white;
@@ -96,9 +86,38 @@ footer {
 	padding-top: 0px;
 }
 
+iframe {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
 #yt-player {
 	width: 80%;
-  border-radius: 25px;
+}
+
+#wiki-player-song {
+	width: 100%;
+}
+
+#wiki-player-artist {
+	width: 100%;
+}
+
+#seatgeek-player {
+	width: 100%;
+}
+
+.tourResults > iframe {
+	height: 300px;
+}
+
+.infoResults > iframe {
+	height: 300px;
+}
+
+.artistResults > iframe {
+	height: 300px;
 }
 
 #preview-player {
@@ -107,6 +126,11 @@ footer {
 
 .watchResults {
 	text-align: center;
+}
+
+.infoResults {
+	text-align: center;
+	overflow: hidden;
 }
 
 .meaningResults {
