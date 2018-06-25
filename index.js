@@ -221,7 +221,7 @@ function getArtistResults(artistName, songName) {
   $.getJSON("https://en.wikipedia.org/w/api.php", queryArtistWiki, function (obj) {
     $("#results").prop("hidden", false);
     $("#artist-results").append(`
-      <iframe id="wiki-player-artist" type="text/html" scrolling="auto" src="http://en.m.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
+      <iframe id="wiki-player-artist" type="text/html" scrolling="auto" src="https://en.m.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
     `)
   });
 }
