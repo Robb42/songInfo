@@ -159,7 +159,7 @@ function getInfoResults(artistName, songName) {
   $.getJSON("https://en.wikipedia.org/w/api.php", queryWiki, function (obj) {
     $("#results").prop("hidden", false);
     $("#info-results").append(`
-      <iframe id="wiki-player-song" type="text/html" scrolling="auto" src="http://en.m.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
+      <iframe id="wiki-player-song" type="text/html" scrolling="auto" src="https://en.m.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
     `)
   });
 }
@@ -201,7 +201,6 @@ function getLyricsResults(artistName, songName) {
 function getTourResults(artistName, songName) {
   //get tour info from Bandsintown API
   $.getJSON(`https://rest.bandsintown.com/artists/${artistName}?app_id=c8d76e3370fa422fc61e53c1c69e7402`, function (obj) {
-    console.log(obj);
     $("#results").prop("hidden", false);
     $("#tour-results").append(`
         <iframe id="seatgeek-player" type="text/html" scrolling="auto" src="https://www.bandsintown.com/a/${obj.id}"></iframe>
