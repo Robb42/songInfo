@@ -67,11 +67,9 @@ function confirmQuery(songArray, artistArray, albumArray, artArray) {
 function changeBackground(artistName) {
   $.getJSON(`https://rest.bandsintown.com/artists/${artistName}?app_id=c8d76e3370fa422fc61e53c1c69e7402`, function (obj) {
     $(".background").css({
-      "background-image": `url(${obj.image_url})`,
+      "background": `url(${obj.image_url}) no-repeat center center fixed`,
       "background-size": "cover",
-      "height": "100%",
-      "background-position": "top center",
-      "background-repeat": "repeat"
+      "height": "100%"
     });
   });
 }
@@ -87,8 +85,8 @@ function getSongPreview (artistName, songName) {
     url: "https://itunes.apple.com/search",
     success: function(data) {
       $("#results").prop("hidden", false);
-      $("#song-preview").append(`
-        <audio class= "previewPlayer" id="preview-player"autoplay hidden>
+      $("#misc-results").prepend(`<br>
+        <audio class= "previewPlayer" id="preview-player" controls>
           <source src="${data.results[0].previewUrl}" type="audio/x-m4a">
         </audio>
       `)
@@ -97,7 +95,7 @@ function getSongPreview (artistName, songName) {
 }
 
 function getMiscResults(artistName, songName) {
-  //get song facts from musixmatch and artwork from iTunes
+  //get song facts from musixmatch and song preview and artwork from iTunes
   $.ajax({
     type: "GET",
     data: {
@@ -113,7 +111,6 @@ function getMiscResults(artistName, songName) {
     jsonpCallback: "jsonp_callback",
     contentType: "application/json",
     success: function(data) {
-      console.log(data);
       let mmTrackId = data.message.body.track_list[0].track.track_id;
       let releaseDate = new Date(data.message.body.track_list[0].track.first_release_date);
       let convertedRelease = `${releaseDate.getMonth()+1}/${releaseDate.getDate()}/${releaseDate.getFullYear()}`;
@@ -162,7 +159,7 @@ function getInfoResults(artistName, songName) {
   $.getJSON("https://en.wikipedia.org/w/api.php", queryWiki, function (obj) {
     $("#results").prop("hidden", false);
     $("#info-results").append(`
-      <iframe id="wiki-player-song" type="text/html" scrolling="auto" src="http://en.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
+      <iframe id="wiki-player-song" type="text/html" scrolling="auto" src="http://en.m.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
     `)
   });
 }
@@ -202,23 +199,15 @@ function getLyricsResults(artistName, songName) {
 }
 
 function getTourResults(artistName, songName) {
-  //get info from Bandsintown and Seatgeek APIs
-  $.ajax({
-    type: "GET",
-    data: {
-      client_id: "MTE5ODc4MTZ8MTUyOTQyNjE4MC4wOQ",
-      client_secret: "b178512fb9cf7615fe532cf4391774f3f25bb0acf61ef64a023d6a237e4c10d9",
-      q: `${artistName}`,
-    },
-    dataType: "json",
-    url: "https://api.seatgeek.com/2/performers",
-    success: function(data) {
-      $("#results").prop("hidden", false);
-      $("#tour-results").append(`
-        <iframe id="seatgeek-player" type="text/html" scrolling="auto" src="${data.performers[0].url}"></iframe>
-        `)
-    }
+  //get tour info from Bandsintown API
+  $.getJSON(`https://rest.bandsintown.com/artists/${artistName}?app_id=c8d76e3370fa422fc61e53c1c69e7402`, function (obj) {
+    console.log(obj);
+    $("#results").prop("hidden", false);
+    $("#tour-results").append(`
+        <iframe id="seatgeek-player" type="text/html" scrolling="auto" src="https://www.bandsintown.com/a/${obj.id}"></iframe>
+      `)
   });
+
 }
 
 function getArtistResults(artistName, songName) {
@@ -233,7 +222,7 @@ function getArtistResults(artistName, songName) {
   $.getJSON("https://en.wikipedia.org/w/api.php", queryArtistWiki, function (obj) {
     $("#results").prop("hidden", false);
     $("#artist-results").append(`
-      <iframe id="wiki-player-artist" type="text/html" scrolling="auto" src="http://en.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
+      <iframe id="wiki-player-artist" type="text/html" scrolling="auto" src="http://en.m.wikipedia.org/?curid=${obj.query.search[0].pageid}"></iframe>
     `)
   });
 }
