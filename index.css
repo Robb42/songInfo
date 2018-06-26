@@ -37,7 +37,8 @@ fieldset {
   	border-radius: 25px;
   	height: 640px;
 	margin-top: 25px;
-  	padding: 0;
+	padding: 0;  
+	position: relative;
 }
 
 .overflowYes {
@@ -49,31 +50,13 @@ fieldset {
 }
 
 .lastContainer {
-	margin-bottom: 100px;
-}
-
-.confirmQueryContainer {
-  	background-color: rgba(255,255,255,0.6);
-	border: 1px solid lightgray;
-  	border-radius: 25px;
-  	height: 670px;
-  	margin-top: 25px;
-  	padding: 5px;	
-  	padding-top: 0px;
-  	margin-left: auto;
-  	margin-right: auto;
-  	text-align: center;
-  	font-size: 0;
-  	margin-bottom: 100px;
-}
-
-.lyricResults {
-	overflow: auto !important;
+	margin-bottom: 85px;
 }
 
 .infoStyle {
 	font-family: 'Andika', sans-serif;
-	font-size: 20px;
+	font-size: 18px;
+	text-shadow: 0 1px 0 gray;
 }
 
 .searchContainer {
@@ -132,16 +115,23 @@ iframe {
 	height: 300px;
 }
 
+.firstYtPlayer {
+	margin-top: 25px;
+}
+
 #wiki-player-song {
 	width: 100%;
+	margin-top: 30px; 
 }
 
 #wiki-player-artist {
 	width: 100%;
+	margin-top: 30px;
 }
 
 #seatgeek-player {
 	width: 100%;
+	margin-top: 30px;
 }
 
 .tourResults > iframe {
@@ -173,8 +163,9 @@ iframe {
 .options {
 	display: inline-block;
 	width: 50%;
-	height: 190px;
+	height: 203.33px;
 	padding: 0;
+	text-align: center;
 }
 
 .options:hover, .options:focus {
@@ -196,19 +187,23 @@ iframe {
 }
 
 .options > h4 {
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 }
 
 .options > h3 {
 	margin-top: 15px;
 }
 
-.confirmTitle {
-  font-size: 20px;
+.optionOne, .optionTwo {
+	margin-top: 30px;
+}
+
+/*.confirmTitle {
+  	font-size: 20px;
 	display: block;
 	width: 100%;
-  text-align: center;
-}
+  	text-align: center;
+}*/
 
 h1 {
 	font-family: 'Expletus Sans', cursive;
@@ -238,7 +233,7 @@ section {
 
 .miscResults {
 	padding-top: 25px;
-	padding-bottom: 20px;
+	padding-bottom: 0px;
 	padding-right: 20px;
 	padding-left: 20px;
 	text-align: center;
@@ -259,10 +254,15 @@ section {
 	font-family: 'Expletus Sans', cursive;
 	padding-top: 6px;
 	font-size: 18px;
+	position: absolute;
+	width: 100%;
 }
 
 .lyricsStyle {
 	font-family: 'Lemonada', cursive;
+	margin-top: 40px;
+	font-size: 15px;
+	text-shadow: 0 1px 0 gray;
 }
 
 .lyricsResults {
@@ -275,6 +275,7 @@ section {
 
 img.artworkImg {
 	border-radius: 25px;
+	margin-top: 25px;
 }
 
 .options > p > img {
@@ -284,4 +285,5 @@ img.artworkImg {
 .previewPlayer {
 	width: 100%;
 	padding-top: 15px;
+	margin-bottom: 12px;
 }

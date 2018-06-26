@@ -33,32 +33,32 @@
 				</form>
 			</section>
 
-			<section role="dialog" id="confirm-query" class="col-12 confirmQuery" aria-live="assertive" hidden>
-				<div class="confirmQueryContainer">
-					<div class="confirmTitle">
-						<h3>Which song are you searching for?</h3>
+			<section role="dialog" id="confirm-query" aria-live="assertive" hidden>
+				<div class="col-12">
+					<div class="resultContainer overflowNo lastContainer">
+						<h2 class="resultTitles">Which song?</h2>
+						<div class="options optionOne" id="option-one"></div>
+						<div class="options optionTwo" id="option-two"></div>
+						<div class="options optionThree" id="option-three"></div>
+						<div class="options optionFour" id="option-four"></div>
+						<div class="options optionFive" id="option-five"></div>
+						<div class="options optionSix" id="option-six"></div>
 					</div>
-					<div class="options optionOne" id="option-one"></div>
-					<div class="options optionTwo" id="option-two"></div>
-					<div class="options optionThree" id="option-three"></div>
-					<div class="options optionFour" id="option-four"></div>
-					<div class="options optionFive" id="option-five"></div>
-					<div class="options optionSix" id="option-six"></div>
 				</div>
 			</section>
 
 			<section role="region" id="results" aria-live="assertive" hidden>	
 
 				<div class="col-4">
-		          <div class="resultContainer overflowNo">
-		            <!--<h2>#misc-results</h2>-->
+		          <div class="resultContainer overflowYes">
+		            <h2 class="resultTitles">The Basics</h2>
 		            <div class="miscResults" id="misc-results"></div>
 		          </div>
 		        </div>
 
 		        <div class="col-8">
 		          <div class="resultContainer overflowNo">
-		            <h2 class="resultTitles">Info</h2>
+		            <h2 class="resultTitles">More Info</h2>
 		            <div class="infoResults" id="info-results"></div>
 		          </div>
 		        </div>

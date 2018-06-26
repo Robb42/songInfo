@@ -75,61 +75,11 @@ function changeBackground(artistName) {
 }
 
 function getSongPreview (artistName, songName) {
-  $.ajax({
-    type: "GET",
-    data: {
-      term: `${songName} ${artistName}`,
-      country: "US",
-    },
-    dataType: "json",
-    url: "https://itunes.apple.com/search",
-    success: function(data) {
-      $("#results").prop("hidden", false);
-      $("#misc-results").prepend(`<br>
-        <audio class= "previewPlayer" id="preview-player" controls>
-          <source src="${data.results[0].previewUrl}" type="audio/x-m4a">
-        </audio>
-      `)
-    }
-  });
+  
 }
 
 function getMiscResults(artistName, songName) {
   //get song facts from musixmatch and song preview and artwork from iTunes
-  $.ajax({
-    type: "GET",
-    data: {
-      apikey: "723d40ea5e7c1abaf24147f2d427939a",
-      q_track: `${songName}`,
-      q_artist: `${artistName}`,
-      s_track_rating: "DESC", 
-      format: "jsonp",
-      callback: "jsonp_callback"
-    },
-    url: "https://api.musixmatch.com/ws/1.1/track.search",
-    dataType: "jsonp",
-    jsonpCallback: "jsonp_callback",
-    contentType: "application/json",
-    success: function(data) {
-      let mmTrackId = data.message.body.track_list[0].track.track_id;
-      let releaseDate = new Date(data.message.body.track_list[0].track.first_release_date);
-      let convertedRelease = `${releaseDate.getMonth()+1}/${releaseDate.getDate()}/${releaseDate.getFullYear()}`;
-      let trackLength = data.message.body.track_list[0].track.track_length;
-      let minutes = Math.floor(trackLength / 60);
-      let seconds = trackLength - minutes * 60;
-      $("#results").prop("hidden", false);
-      $("#misc-results").append(`
-        <ul class="infoStyle">
-          <li><b>Name:</b><br> ${data.message.body.track_list[0].track.track_name}<br><br></li>
-          <li><b>Artist:</b><br> ${data.message.body.track_list[0].track.artist_name}<br><br></li>
-          <li><b>Album:</b><br> ${data.message.body.track_list[0].track.album_name}<br><br></li>
-          <li><b>Release Date:</b><br> ${convertedRelease}<br><br></li>
-          <li><b>Genre:</b><br> ${data.message.body.track_list[0].track.primary_genres.music_genre_list[0].music_genre.music_genre_name}<br><br></li>
-          <li><b>Track Length:</b><br> ${minutes}:${seconds}<br><br></li>
-        </ul>
-      `);
-    },
-  });
   $.ajax({
     type: "GET",
     data: {
@@ -138,11 +88,63 @@ function getMiscResults(artistName, songName) {
     },
     dataType: "json",
     url: "https://itunes.apple.com/search",
-      success: function(data) {
-        $("#results").prop("hidden", false);
-        $("#misc-results").prepend(`
-          <img class="artworkImg" src="${data.results[0].artworkUrl100}" alt="Album Artwork">
-          `)
+    success: function(data) {
+      $("#results").prop("hidden", false);
+      $("#misc-results").prepend(`
+        <img class="artworkImg" src="${data.results[0].artworkUrl100}" alt="Album Artwork">
+        `)
+        $.ajax({
+          type: "GET",
+          data: {
+            term: `${songName} ${artistName}`,
+            country: "US",
+          },
+          dataType: "json",
+          url: "https://itunes.apple.com/search",
+          success: function(data) {
+            $("#results").prop("hidden", false);
+            $("#misc-results").append(`<br>
+              <audio class= "previewPlayer" id="preview-player" controls>
+                <source src="${data.results[0].previewUrl}" type="audio/x-m4a">
+              </audio>
+            `);
+            $.ajax({
+              type: "GET",
+              data: {
+                apikey: "723d40ea5e7c1abaf24147f2d427939a",
+                q_track: `${songName}`,
+                q_artist: `${artistName}`,
+                s_track_rating: "DESC", 
+                format: "jsonp",
+                callback: "jsonp_callback"
+              },
+              url: "https://api.musixmatch.com/ws/1.1/track.search",
+              dataType: "jsonp",
+              jsonpCallback: "jsonp_callback",
+              contentType: "application/json",
+              success: function(data) {
+                let mmTrackId = data.message.body.track_list[0].track.track_id;
+                let releaseDate = new Date(data.message.body.track_list[0].track.first_release_date);
+                let convertedRelease = `${releaseDate.getMonth()}/${releaseDate.getDate()}/${releaseDate.getFullYear()}`;
+                let releaseYear = `${releaseDate.getFullYear()}`
+                let trackLength = data.message.body.track_list[0].track.track_length;
+                let minutes = Math.floor(trackLength / 60);
+                let seconds = trackLength - minutes * 60;
+                $("#results").prop("hidden", false);
+                $("#misc-results").append(`
+                  <ul class="infoStyle">
+                    <li><b>Name:</b><br> ${data.message.body.track_list[0].track.track_name}<br><br></li>
+                    <li><b>Artist:</b><br> ${data.message.body.track_list[0].track.artist_name}<br><br></li>
+                    <li><b>Album:</b><br> ${data.message.body.track_list[0].track.album_name}<br><br></li>
+                    <li><b>Release Year:</b><br> ${releaseYear}<br><br></li>
+                    <li><b>Genre:</b><br> ${data.message.body.track_list[0].track.primary_genres.music_genre_list[0].music_genre.music_genre_name}<br><br></li>
+                    <li><b>Track Length:</b><br> ${minutes}:${seconds}<br><br></li>
+                  </ul>
+                `);
+              },
+            });
+          }
+        });
     }
   });
 }
@@ -177,7 +179,7 @@ function getWatchResults(artistName, songName) {
   $.getJSON("https://www.googleapis.com/youtube/v3/search", queryYoutube, function (obj) {
     $("#results").prop("hidden", false);
     $("#watch-results").append(`
-      <iframe id="yt-player" type="text/html" src="https://www.youtube.com/embed/${obj.items[0].id.videoId}"></iframe>
+      <iframe id="yt-player" class="firstYtPlayer" type="text/html" src="https://www.youtube.com/embed/${obj.items[0].id.videoId}"></iframe>
       <iframe id="yt-player" type="text/html" src="https://www.youtube.com/embed/${obj.items[1].id.videoId}"></iframe>
       <iframe id="yt-player" type="text/html" src="https://www.youtube.com/embed/${obj.items[2].id.videoId}"></iframe>
       <iframe id="yt-player" type="text/html" src="https://www.youtube.com/embed/${obj.items[3].id.videoId}"></iframe>
