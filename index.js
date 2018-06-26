@@ -141,6 +141,7 @@ function getMiscResults(artistName, songName) {
                     <li><b>Track Length:</b><br> ${minutes}:${seconds}<br><br></li>
                   </ul>
                 `);
+                $("#song-title").text(`${data.message.body.track_list[0].track.track_name}`);
               },
             });
           }

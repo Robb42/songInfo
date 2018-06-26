@@ -42,6 +42,10 @@ fieldset {
 }
 
 .overflowYes {
+	overflow: hidden;
+}
+
+.overflowYes:hover {
 	overflow: auto;
 }
 
