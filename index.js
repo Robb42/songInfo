@@ -273,6 +273,11 @@ function watchClicks() {
     }
   });
 
+  //watch h1 for clicks, acts as Home button
+  $("h1").click(function() {
+    location.reload();
+  })
+
   //watch main search submit button
   $("#js-search-form").submit(function () {
     event.preventDefault();
