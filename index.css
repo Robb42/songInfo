@@ -41,6 +41,24 @@ fieldset {
 	position: relative;
 }
 
+.welcomeContainer {
+	height: 640px;
+  margin-top: 50px;
+  padding: 0;  
+  position: relative;
+  text-align: center;
+}
+
+.welcomeContainer > p {
+	font-family: 'Expletus Sans', cursive;
+	font-size: 3vh;
+	text-shadow: 0 2px 0 black;
+	color: white;
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .overflowYes {
 	overflow: hidden;
 }
@@ -213,9 +231,10 @@ h1 {
 	font-family: 'Expletus Sans', cursive;
 	font-size: 30px;
 	display: inline-block;
-	width: 100%;
+	width: 50%;
 	text-align: left;
 	margin-top: 10px;
+	float: left;
 }
 
 header {
@@ -263,7 +282,7 @@ section {
 }
 
 .lyricsStyle {
-	font-family: 'Lemonada', cursive;
+	font-family: 'Expletus Sans', cursive;
 	margin-top: 40px;
 	font-size: 15px;
 	text-shadow: 0 1px 0 gray;
@@ -290,4 +309,16 @@ img.artworkImg {
 	width: 100%;
 	padding-top: 15px;
 	margin-bottom: 12px;
+}
+
+form#nav-bar {
+	width: 50%;
+	float: right;
+	margin-top: 15px;
+	font-family: 'Expletus Sans', cursive;
+}
+
+select {
+	border-radius: 25px;
+	padding-left: 10px;
 }

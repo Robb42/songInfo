@@ -17,9 +17,22 @@
 
 	<header role="banner">
 		<div class="row">
-			<div class="col-12 headerBox songPreview" id="song-preview">
+			<nav role="navigation" class="col-12">
 				<h1>SongInfo</h1>
-			</div>
+				<form id="nav-bar" action="#" hidden>
+					<label class="navBar" for="nav-jump-to">Jump to:</label>
+					<select name="navJumpTo" id="nav-jump-to" required>
+						<option value="0" selected>Jump to...</option>
+						<option value="1">Top</option>
+						<option value="2">Info</option>
+						<option value="3">Watch</option>
+						<option value="4">Lyrics</option>
+						<option value="5">Tour</option>
+						<option value="6">Artist</option>
+						<option value="7">*New Search*</option>
+					</select>
+				</form>
+			</nav>
 		</div>
 	</header>
 
@@ -33,10 +46,18 @@
 				</form>
 			</section>
 
+			<section role="region" name="welcomeMsg" id="welcome-msg" aria-live="assertive">
+				<div class="col-12">
+					<div class="welcomeContainer overflowNo lastContainer">
+						<p>Welcome to SongInfo - a song research app that curates song search results from resources all over the web.  Try it out by searching for a song above!</p>
+					</div>
+				</div>
+			</section>
+
 			<section role="dialog" id="confirm-query" aria-live="assertive" hidden>
 				<div class="col-12">
 					<div class="resultContainer overflowNo lastContainer">
-						<h2 class="resultTitles">Which song?</h2>
+						<h2 class="resultTitles">Select a song</h2>
 						<div class="options optionOne" id="option-one"></div>
 						<div class="options optionTwo" id="option-two"></div>
 						<div class="options optionThree" id="option-three"></div>

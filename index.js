@@ -242,6 +242,37 @@ function getDataFromApis(artistName, songName) {
 }
 
 function watchClicks() {
+  //watch nav Jump To select box
+  $("select").on("change", function () {
+    let navSelection = this.value;
+    if (navSelection == 1) {
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    } else if (navSelection == 2) {
+      //Go to Info
+      document.getElementById("info-results").scrollIntoView();
+      window.scrollBy(0,-50);
+    } else if (navSelection == 3) {
+      //Go to Watch
+      document.getElementById("watch-results").scrollIntoView();
+      window.scrollBy(0,-50);
+    } else if (navSelection == 4) {
+      //Go to Lyrics
+      document.getElementById("lyrics-results").scrollIntoView();
+      window.scrollBy(0,-50);
+    } else if (navSelection == 5) {
+      //Go to Tour
+      document.getElementById("tour-results").scrollIntoView();
+      window.scrollBy(0,-50);
+    } else if (navSelection == 6) {
+      //Go to Artist
+      document.getElementById("artist-results").scrollIntoView();
+      window.scrollBy(0,-50);
+    } else if (navSelection == 7) {
+      //Go to New Search 
+      location.reload();
+    }
+  });
+
   //watch main search submit button
   $("#js-search-form").submit(function () {
     event.preventDefault();
@@ -258,6 +289,8 @@ function watchClicks() {
     $("#option-five").empty();
     $("#option-six").empty();
     $("#results").prop("hidden", true);
+    $("#nav-bar").prop("hidden", true);
+    $("#welcome-msg").prop("hidden", true);
     const query = $("#song-search").val();
     $("#song-search").val("");
     getArtistQuery(query);
@@ -268,36 +301,42 @@ function watchClicks() {
     songName = $("#option-one").find("h3").text();
     artistName = $("#option-one").find("h3").siblings("h4").text();
     $("#confirm-query").prop("hidden", true);
+    $("#nav-bar").prop("hidden", false);
     getDataFromApis(artistName, songName);
   });
   $("#option-two").click(function() {
     songName = $("#option-two").find("h3").text();
     artistName = $("#option-two").find("h3").siblings("h4").text();
     $("#confirm-query").prop("hidden", true);
+    $("#nav-bar").prop("hidden", false);
     getDataFromApis(artistName, songName);
   });
   $("#option-three").click(function() {
     songName = $("#option-three").find("h3").text();
     artistName = $("#option-three").find("h3").siblings("h4").text();
     $("#confirm-query").prop("hidden", true);
+    $("#nav-bar").prop("hidden", false);
     getDataFromApis(artistName, songName);
   });
   $("#option-four").click(function() {
     songName = $("#option-four").find("h3").text();
     artistName = $("#option-four").find("h3").siblings("h4").text();
     $("#confirm-query").prop("hidden", true);
+    $("#nav-bar").prop("hidden", false);
     getDataFromApis(artistName, songName);
   });
   $("#option-five").click(function() {
     songName = $("#option-five").find("h3").text();
     artistName = $("#option-five").find("h3").siblings("h4").text();
     $("#confirm-query").prop("hidden", true);
+    $("#nav-bar").prop("hidden", false);
     getDataFromApis(artistName, songName);
   });
   $("#option-six").click(function() {
     songName = $("#option-six").find("h3").text();
     artistName = $("#option-six").find("h3").siblings("h4").text();
     $("#confirm-query").prop("hidden", true);
+    $("#nav-bar").prop("hidden", false);
     getDataFromApis(artistName, songName);
   });
 }
