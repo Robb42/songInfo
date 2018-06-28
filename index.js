@@ -5,7 +5,7 @@ var songName = "";
 var artistName = "";
 
 function getArtistQuery(query) {
-  //function to match song title with artist and gather search results using iTunes API
+  //function to match the queried song title with artist and gather search results using iTunes API
   $.ajax({
     type: "GET",
     data: {
@@ -31,7 +31,7 @@ function getArtistQuery(query) {
 }
 
 function confirmQuery(songArray, artistArray, albumArray, artArray) {
-  //takes search results from getArtist Query and prints them to the user
+  //takes search results from getArtistQuery and prints them to the user
   $("#confirm-query").prop("hidden", false);
   $("#option-one").append(`
     <h3>${songArray[0]}</h3>
@@ -66,7 +66,7 @@ function confirmQuery(songArray, artistArray, albumArray, artArray) {
 }
 
 function changeBackground(artistName) {
-  //dynamically updates the background image using Bandsintown API
+  //dynamically updates the background image using Bandsintown API images
   $.getJSON(`https://rest.bandsintown.com/artists/${artistName}?app_id=c8d76e3370fa422fc61e53c1c69e7402`, function (obj) {
     $(".background").css({
       "background": `url(${obj.image_url}) no-repeat center center fixed`,
@@ -87,63 +87,51 @@ function getMiscResults(artistName, songName) {
     dataType: "json",
     url: "https://itunes.apple.com/search",
     success: function(data) {
+      let genre = data.results[0].primaryGenreName;
       $("#results").prop("hidden", false);
       $("#misc-results").prepend(`
         <img class="artworkImg" src="${data.results[0].artworkUrl100}" alt="Album Artwork">
-        `)
+        <br>
+        <audio class= "previewPlayer" id="preview-player" controls>
+          <source src="${data.results[0].previewUrl}" type="audio/x-m4a">
+        </audio>
+      `)
       $.ajax({
         type: "GET",
         data: {
-          term: `${songName} ${artistName}`,
-          country: "US",
+          apikey: "723d40ea5e7c1abaf24147f2d427939a",
+          q_track: `${songName}`,
+          q_artist: `${artistName}`,
+          s_track_rating: "DESC", 
+          format: "jsonp",
+          callback: "jsonp_callback"
         },
-        dataType: "json",
-        url: "https://itunes.apple.com/search",
+        url: "https://api.musixmatch.com/ws/1.1/track.search",
+        dataType: "jsonp",
+        jsonpCallback: "jsonp_callback",
+        contentType: "application/json",
         success: function(data) {
-          let genre = data.results[0].primaryGenreName;
+          let releaseDate = new Date(data.message.body.track_list[0].track.first_release_date);
+          let releaseYear = `${releaseDate.getFullYear()}`
+          let trackLength = data.message.body.track_list[0].track.track_length;
+          let minutes = Math.floor(trackLength / 60);
+          let seconds = trackLength - minutes * 60;
+          let songTitleLong = data.message.body.track_list[0].track.track_name;
+          let desiredLength = 28;
+          let trimmedTitle = songTitleLong.substr(0, desiredLength);
           $("#results").prop("hidden", false);
-          $("#misc-results").append(`<br>
-            <audio class= "previewPlayer" id="preview-player" controls>
-              <source src="${data.results[0].previewUrl}" type="audio/x-m4a">
-            </audio>
+          $("#misc-results").append(`
+            <ul class="infoStyle">
+              <li><b>Name:</b><br> ${data.message.body.track_list[0].track.track_name}<br><br></li>
+              <li><b>Artist:</b><br> ${data.message.body.track_list[0].track.artist_name}<br><br></li>
+              <li><b>Album:</b><br> ${data.message.body.track_list[0].track.album_name}<br><br></li>
+              <li><b>Release Year:</b><br> ${releaseYear}<br><br></li>
+              <li><b>Genre:</b><br>${genre}<br><br></li>
+              <li><b>Track Length:</b><br> ${minutes}:${seconds}<br><br></li>
+            </ul>
           `);
-          $.ajax({
-            type: "GET",
-            data: {
-              apikey: "723d40ea5e7c1abaf24147f2d427939a",
-              q_track: `${songName}`,
-              q_artist: `${artistName}`,
-              s_track_rating: "DESC", 
-              format: "jsonp",
-              callback: "jsonp_callback"
-            },
-            url: "https://api.musixmatch.com/ws/1.1/track.search",
-            dataType: "jsonp",
-            jsonpCallback: "jsonp_callback",
-            contentType: "application/json",
-            success: function(data) {
-              let mmTrackId = data.message.body.track_list[0].track.track_id;
-              let releaseDate = new Date(data.message.body.track_list[0].track.first_release_date);
-              let convertedRelease = `${releaseDate.getMonth()}/${releaseDate.getDate()}/${releaseDate.getFullYear()}`;
-              let releaseYear = `${releaseDate.getFullYear()}`
-              let trackLength = data.message.body.track_list[0].track.track_length;
-              let minutes = Math.floor(trackLength / 60);
-              let seconds = trackLength - minutes * 60;
-              $("#results").prop("hidden", false);
-              $("#misc-results").append(`
-                <ul class="infoStyle">
-                  <li><b>Name:</b><br> ${data.message.body.track_list[0].track.track_name}<br><br></li>
-                  <li><b>Artist:</b><br> ${data.message.body.track_list[0].track.artist_name}<br><br></li>
-                  <li><b>Album:</b><br> ${data.message.body.track_list[0].track.album_name}<br><br></li>
-                  <li><b>Release Year:</b><br> ${releaseYear}<br><br></li>
-                  <li><b>Genre:</b><br>${genre}<br><br></li>
-                  <li><b>Track Length:</b><br> ${minutes}:${seconds}<br><br></li>
-                </ul>
-              `);
-              $("#song-title").text(`${data.message.body.track_list[0].track.track_name}`);
-            },
-          });
-        }
+          $("#song-title").text(`${trimmedTitle}`);
+        },
       });
     }
   });
@@ -208,7 +196,6 @@ function getTourResults(artistName, songName) {
         <iframe id="seatgeek-player" type="text/html" scrolling="auto" src="https://www.bandsintown.com/a/${obj.id}"></iframe>
       `)
   });
-
 }
 
 function getArtistResults(artistName, songName) {

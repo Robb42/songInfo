@@ -4,7 +4,7 @@ html {
 }
 
 *, *:before, *:after {
-  box-sizing: inherit;
+  	box-sizing: inherit;
 }
 
 .background {
@@ -15,20 +15,20 @@ html {
 }
 
 label {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
+  	border: 0;
+  	clip: rect(0 0 0 0);
+  	height: 1px;
+  	margin: -1px;
+  	overflow: hidden;
+  	padding: 0;
+  	position: absolute;
+  	width: 1px;
 }
 
 fieldset {
-  border: 0 none;
-  padding: 0;
-  margin: 0;
+  	border: 0 none;
+  	padding: 0;
+  	margin: 0;
 }
 
 .resultContainer {
@@ -43,10 +43,10 @@ fieldset {
 
 .welcomeContainer {
 	height: 640px;
-  margin-top: 50px;
-  padding: 0;  
-  position: relative;
-  text-align: center;
+  	margin-top: 50px;
+  	padding: 0;  
+  	position: relative;
+  	text-align: center;
 }
 
 .welcomeContainer > p {
@@ -219,13 +219,6 @@ iframe {
 .optionOne, .optionTwo {
 	margin-top: 30px;
 }
-
-/*.confirmTitle {
-  	font-size: 20px;
-	display: block;
-	width: 100%;
-  	text-align: center;
-}*/
 
 h1 {
 	font-family: 'Expletus Sans', cursive;
