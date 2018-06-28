@@ -113,6 +113,7 @@ fieldset {
 
 .searchButton:hover, .searchButton:focus {
 	background: rgba(70,115,184,0.6);
+	cursor: pointer;
 }
 
 footer {
@@ -192,6 +193,7 @@ iframe {
 
 .options:hover, .options:focus {
 	background: rgba(70,115,184,0.6);
+	cursor: pointer;
 }
 
 .optionOne, .optionThree, .optionFive {
@@ -228,6 +230,7 @@ h1 {
 	text-align: left;
 	margin-top: 10px;
 	float: left;
+	cursor: pointer;
 }
 
 header {
