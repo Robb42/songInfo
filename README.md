@@ -2,15 +2,15 @@
 <p>A song research application.</p><br>
 
 
-<h2>Summary</h2><hr>
+<h2>Summary</h2>
 <p>Users enter the name of a song they want to learn about and are returned results including song meanings, lyrics, reviews, artist information, videos, tour information from various API's including iTunes, Bandsintown, Musixmatch, Wikipedia, Youtube and Lyrics.ovh.</p><br>
 
 
-<h2>Live app:</h2><hr>
+<h2>Live app:</h2>
 <p>https://robb42.github.io/songInfo/</p><br>
 
 
-<h2>Screenshots</h2><hr>
+<h2>Screenshots</h2>
 <p>Landing/Welcome page</p>
 <img src="img/welcome.jpg">
 <br>
@@ -33,5 +33,5 @@
 <img src="img/navmenu.jpg"><br>
 
 
-<h2>Technology used</h2><hr>
+<h2>Technology used</h2>
 <p>HTML/CSS/JavaScript/jQuery</p>
