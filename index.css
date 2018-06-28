@@ -317,4 +317,5 @@ form#nav-bar {
 select {
 	border-radius: 25px;
 	padding-left: 10px;
+	cursor: pointer;
 }
